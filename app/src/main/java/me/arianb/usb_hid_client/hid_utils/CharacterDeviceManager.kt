@@ -75,19 +75,18 @@ class CharacterDeviceManager private constructor(private val application: Applic
         // Get selinux context for app
         val commandResult = Shell.cmd("stat -c %C $appDataDirPath").exec()
 
-        // Get the part of the context that I need (categories) by grabbing everything after the last ':'
-        val contextFromCommand = java.lang.String.join("\n", commandResult.out)
-        var categories = contextFromCommand
+        val selinuxContextString = commandResult.out.joinToString(separator = "\n").trim()
 
-        // TODO: handle the case that stdout doesn't include any ':' (idk why that would even happen tho)
-        categories = categories.substring(categories.lastIndexOf(':') + 1)
-        categories = categories.trim { it <= ' ' } // trim whitespace
-        Timber.d("context (before,after): (%s,%s)", contextFromCommand, categories)
+        // Get the part of the context that I need (categories) by grabbing everything after the last ':'
+        val categories = selinuxContextString.substringAfterLast(':')
 
         // If it hasn't changed, then the previous piece of code failed to get the substring
-        if (categories == contextFromCommand) {
+        if (categories == selinuxContextString) {
             Timber.wtf("Failed to get app's selinux context")
         }
+
+        Timber.d("context (before,after): (%s,%s)", selinuxContextString, categories)
+
         return categories
     }
 
