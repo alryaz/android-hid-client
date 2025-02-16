@@ -42,18 +42,17 @@ abstract class ReportSender(
     }
 
     open fun sendReport(report: ByteArray) {
-        writeBytes(report, characterDevicePath)
+        writeBytes(report)
     }
 
     companion object {
         val dispatcher = Dispatchers.IO
 
-        // Writes HID report to character device
-        @Throws(IOException::class, FileNotFoundException::class)
-        fun writeBytes(report: ByteArray, path: String) {
-            FileOutputStream(path).use { outputStream ->
-                outputStream.write(report)
-            }
+    // Writes HID report to character device
+    @Throws(IOException::class, FileNotFoundException::class)
+    fun writeBytes(report: ByteArray) {
+        FileOutputStream(characterDevicePath).use { outputStream ->
+            outputStream.write(report)
         }
     }
 }
