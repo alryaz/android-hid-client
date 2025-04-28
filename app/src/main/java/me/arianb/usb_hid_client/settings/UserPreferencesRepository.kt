@@ -37,7 +37,7 @@ sealed class AppPreference(val preference: PreferenceKey<*>) {
     data object ExperimentalMode : BooleanPreferenceKey("experimental_mode", false)
     data object TouchpadFullscreenInLandscape : BooleanPreferenceKey("touchpad_fullscreen_in_landscape", false)
     data object UsbGadgetPathPref : ObjectPreferenceKey<UsbGadgetPath>(
-        "usb_gadget_path", UsbGadgetPath("/config/g1"),
+        "usb_gadget_path", UsbGadgetPath("/config/usb_gadget/g1"),
         fromStringPreference = { UsbGadgetPath(it) },
         toStringPreference = { it.path }
     )
